@@ -1,0 +1,25 @@
+# O conjunto de dados não é redistribuído por este repositório
+INSECT12C-Dataset/
+dados_yolo/
+*.jpg
+*.JPG
+*.png
+*.xml
+
+# Pesos e saídas de treinamento
+*.pt
+*.onnx
+runs/
+weights/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
