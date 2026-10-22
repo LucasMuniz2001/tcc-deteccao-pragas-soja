@@ -21,7 +21,8 @@ esse é o número que corresponde ao embarque em hardware modesto.
 
 ## Ambiente de treinamento
 
-Google Colab, com GPU NVIDIA T4 de 16 GB.
+Google Colab, com GPU NVIDIA Tesla T4 de 15.360 MiB, driver 580.82.07, 2 CPUs e
+12,7 GB de memória — valores da sessão efetivamente utilizada.
 
 O orçamento estimado é de cerca de **25 horas de GPU**:
 
@@ -74,7 +75,7 @@ O conjunto preparado ocupa aproximadamente 260 MB, enviado uma única vez.
 | Função | Ferramenta |
 |---|---|
 | Linguagem | Python 3 |
-| Treinamento e inferência | Ultralytics YOLOv8 sobre PyTorch |
+| Treinamento e inferência | Ultralytics YOLOv8 8.4.183 sobre PyTorch 2.11.0 (CUDA 13.0) |
 | Aumento de dados | Operações nativas da biblioteca, complementadas pelo Albumentations |
 | Imagens, análise e gráficos | OpenCV, Pillow, NumPy, scikit-learn, Matplotlib |
 | Inferência otimizada | Exportação para ONNX |
