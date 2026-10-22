@@ -52,3 +52,27 @@ na cópia de trabalho.
 
 O conjunto original não é alterado em nenhum momento. Toda a preparação escreve em
 diretório novo.
+
+## Execução
+
+O procedimento está implementado em
+[`scripts/01_regenera_rotulos.py`](../scripts/01_regenera_rotulos.py) e o relatório
+é gravado como `relatorio_auditoria.csv` no diretório de saída.
+
+A execução sobre as 1.800 amostras registrou **63 ocorrências**: as 6 divergências
+de anotação da tabela acima e as 57 extensões não canônicas. Foram gravados 1.800
+rótulos e **2.757 caixas** — uma menos do que as 2.758 anotadas, pela caixa
+degenerada de `img631`.
+
+Duas notas sobre a implementação, ambas consequência de detalhes que distorceriam
+a contagem se passassem em branco:
+
+**A extensão é consultada na listagem do diretório, não por tentativa de abertura.**
+O sistema de arquivos do Windows ignora a caixa das letras, de modo que um teste
+por `img1.jpg` encontra `img1.JPG` e as 57 divergências de extensão passariam
+despercebidas.
+
+**O descarte de uma caixa inválida não é relatado duas vezes.** A comparação de
+contagem usa o número de organismos declarados no XML *antes* do descarte. Sem
+isso, `img631` apareceria também como divergência de contagem — o mesmo defeito
+contado como dois.

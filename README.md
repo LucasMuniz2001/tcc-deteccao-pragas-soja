@@ -51,6 +51,37 @@ aumento de dados, o cálculo das métricas e a exportação para ONNX.
 Os pseudocódigos dos três procedimentos autorais estão no Apêndice A do trabalho
 escrito e são a especificação que os scripts deste repositório implementam.
 
+## Como reproduzir a preparação dos dados
+
+Requer Python 3, Pillow e NumPy. O conjunto INSECT12C deve estar em um diretório
+próprio, obtido com os autores. A preparação escreve em diretório novo e **não
+altera o conjunto original.**
+
+```
+python -P scripts/01_regenera_rotulos.py  <INSECT12C-Dataset>  dados_yolo
+python -P scripts/02_particiona_dobras.py  dados_yolo
+```
+
+A primeira etapa reconstrói os 1.800 rótulos a partir dos XML e grava
+`relatorio_auditoria.csv`. A segunda calcula os resumos perceptuais, agrupa as
+quase-duplicatas, estratifica em cinco dobras e grava as listas de treino e
+validação, os cinco arquivos `data_dobraN.yaml` e o registro `particao.json`.
+
+A partição é determinística: com a mesma semente, duas execuções produzem a
+mesma atribuição. Para gerar os arquivos de configuração já apontando para o
+ambiente de treinamento, use `--raiz /content/dados_yolo`.
+
+### Saída obtida
+
+| Verificação | Resultado |
+|---|---|
+| Rótulos regenerados | 1.800 |
+| Caixas gravadas | 2.757 — uma caixa degenerada descartada das 2.758 anotadas |
+| Ocorrências no relatório | 63 — 6 defeitos de anotação e 57 extensões não canônicas |
+| Grupos de quase-duplicatas | 6, envolvendo 13 imagens, mantidos na mesma dobra |
+| Imagens por dobra de validação | 359, 365, 361, 355 e 360 |
+| Caixas da classe mais rara por dobra | 5, 5, 4, 5 e 4 (*Nezara viridula* ninfa, 23 no total) |
+
 ---
 
 ## O conjunto de dados
@@ -128,15 +159,15 @@ GPU NVIDIA T4. O orçamento estimado é de cerca de 25 horas de GPU, o que exced
 | Materiais e métodos (Capítulo 2) | Escrito, em revisão pelo professor |
 | Auditoria do conjunto de dados | Executada — 6 ocorrências encontradas |
 | Análise de quase-duplicatas | Executada — 6 grupos, 13 imagens |
-| Regeneração dos rótulos | A implementar |
-| Partição em dobras | A implementar |
+| Regeneração dos rótulos | Implementada e executada — `scripts/01_regenera_rotulos.py` |
+| Partição em dobras | Implementada e executada — `scripts/02_particiona_dobras.py` |
 | Treinamento | Não iniciado |
 | Resultados (Capítulo 3) | Não iniciado |
 | Conclusão (Capítulo 4) | Não iniciado |
 
 Os scripts serão publicados aqui conforme forem implementados. Este repositório
-nasce com a documentação do método porque a especificação precede a implementação —
-não porque o código já exista.
+nasceu com a documentação do método porque a especificação precede a implementação,
+e não porque o código já existisse.
 
 ---
 

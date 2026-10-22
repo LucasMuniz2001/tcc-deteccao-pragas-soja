@@ -50,6 +50,30 @@ aloca-se a imagem na dobra que mais precisa daquela classe. Isso garante que as 
 anotações de *Nezara viridula* ninfa, por exemplo, sejam distribuídas entre as cinco
 dobras em vez de se concentrarem em uma delas.
 
+O algoritmo opera sobre a **presença da classe na imagem**, e não sobre a contagem
+de caixas. A distinção tem efeito prático: equilibrar as contagens de caixas deixa
+livre a quantidade de imagens por dobra, e a primeira execução feita dessa forma
+produziu dobras de 338 a 376 imagens — dispersão que a validação cruzada não
+pressupõe. Com a formulação por presença, as dobras ficaram entre 355 e 365
+imagens, e as contagens de caixas permaneceram igualmente equilibradas.
+
+### Resultado da execução
+
+Implementada em
+[`scripts/02_particiona_dobras.py`](../scripts/02_particiona_dobras.py).
+
+| Dobra | Imagens de validação | Imagens de treino | Caixas de *N. viridula* ninfa |
+|---|---|---|---|
+| 1 | 359 | 1.441 | 5 |
+| 2 | 365 | 1.435 | 5 |
+| 3 | 361 | 1.439 | 4 |
+| 4 | 355 | 1.445 | 5 |
+| 5 | 360 | 1.440 | 4 |
+
+A partição é determinística: a semente é fixa e gravada, junto da atribuição
+completa de cada imagem, em `particao.json`. Duas execuções produzem arquivos
+idênticos — verificado.
+
 ### Três salvaguardas
 
 1. **Partição no nível da imagem, não da caixa.** Todos os organismos de uma imagem
