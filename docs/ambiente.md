@@ -46,6 +46,16 @@ estado do otimizador salvos ao fim de cada época em armazenamento persistente, 
 execuções retomadas a partir do último ponto salvo. Reconectar custa minutos, não
 um treino inteiro.
 
+O orçamento foi coberto por uma assinatura Google AI Pro, que concede 200
+unidades de computação mensais no Colab. Pelas medições disponíveis, uma T4
+consome entre 1,2 e 2,0 unidades por hora — o Google não publica a taxa — de modo
+que as 25 horas estimadas correspondem a algo entre 30 e 50 unidades.
+
+A T4 é fixada deliberadamente no seletor de ambiente de execução, embora o plano
+dê acesso a aceleradores mais rápidos. A meta de 50 ms por imagem é declarada
+para a T4, e medir em outra placa tornaria o número incomparável com o que está
+escrito. O gargalo do projeto não é tempo de GPU.
+
 ### Fluxo de uma sessão
 
 1. Montar o Google Drive.

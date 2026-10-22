@@ -71,6 +71,27 @@ A partição é determinística: com a mesma semente, duas execuções produzem 
 mesma atribuição. Para gerar os arquivos de configuração já apontando para o
 ambiente de treinamento, use `--raiz /content/dados_yolo`.
 
+## Como executar o treinamento
+
+[`notebooks/treinamento_colab.ipynb`](notebooks/treinamento_colab.ipynb) executa o
+procedimento experimental da Seção 2.5.3: a fase 1 compara os três modelos nas
+cinco dobras com semente fixa, e a fase 2 repete o modelo escolhido com duas
+sementes adicionais.
+
+Envie `dados_yolo` compactado para o Drive, abra o notebook no Colab e **selecione
+a GPU T4** — o notebook verifica isso e avisa, porque o capítulo 2 declara a T4
+como a condição à qual a meta de 50 ms se refere.
+
+O notebook é idempotente. Ao fim de cada época, os pesos, o estado do otimizador
+e as métricas são copiados para o Drive; o treino em si roda no disco local da
+máquina virtual, que é rápido. Uma execução interrompida retoma do último ponto
+salvo, e uma execução já concluída é reconhecida e saltada. Isso existe porque as
+~25 horas de GPU estimadas não cabem em nenhuma sessão única do Colab.
+
+Antes de treinar, o notebook confere que o pacote recebido tem 1.800 imagens,
+1.800 rótulos, 12 classes e 2.757 caixas. Se algum número divergir, o pacote não
+é o que foi auditado e a execução para ali.
+
 ### Saída obtida
 
 | Verificação | Resultado |
@@ -161,6 +182,7 @@ GPU NVIDIA T4. O orçamento estimado é de cerca de 25 horas de GPU, o que exced
 | Análise de quase-duplicatas | Executada — 6 grupos, 13 imagens |
 | Regeneração dos rótulos | Implementada e executada — `scripts/01_regenera_rotulos.py` |
 | Partição em dobras | Implementada e executada — `scripts/02_particiona_dobras.py` |
+| Notebook de treinamento | Implementado — `notebooks/treinamento_colab.ipynb` |
 | Treinamento | Não iniciado |
 | Resultados (Capítulo 3) | Não iniciado |
 | Conclusão (Capítulo 4) | Não iniciado |
