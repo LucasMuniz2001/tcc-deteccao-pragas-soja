@@ -275,7 +275,12 @@ def main():
         treino = [a for j in range(k) if j != m for a in membros[j]]
         treino.sort(key=lambda s: (len(s), s))
         for sufixo, lista in (("train", treino), ("val", membros[m])):
-            linhas = "".join(f"./images/{a}.jpg\n" for a in lista)
+            # O caminho e relativo ao proprio arquivo de lista, e nao ao campo
+            # 'path' do YAML: a Ultralytics substitui o prefixo "./" pelo
+            # diretorio onde a lista esta. Como as listas ficam em dobras/, a
+            # subida de um nivel e obrigatoria; sem ela a biblioteca procura as
+            # imagens em dobras/images/ e rejeita as 1.800 como ilegiveis.
+            linhas = "".join(f"./../images/{a}.jpg\n" for a in lista)
             (dir_dobras / f"dobra{m+1}_{sufixo}.txt").write_text(linhas, encoding="utf-8")
 
         nomes = "\n".join(f"  {c}: {nome}" for c, nome in enumerate(classes))

@@ -71,6 +71,13 @@ A partição é determinística: com a mesma semente, duas execuções produzem 
 mesma atribuição. Para gerar os arquivos de configuração já apontando para o
 ambiente de treinamento, use `--raiz /content/dados_yolo`.
 
+As listas gravadas em `dobras/` trazem caminhos na forma `./../images/imgN.jpg`.
+A forma importa: a Ultralytics resolve o prefixo `./` contra o diretório do
+próprio arquivo de lista, e não contra o campo `path` do YAML. Com
+`./images/imgN.jpg` ela procuraria as imagens em `dobras/images/`, não as
+encontraria e, por tratar caminho inexistente como aviso e não como erro,
+iniciaria o treino sobre um conjunto vazio.
+
 ## Como executar o treinamento
 
 [`notebooks/treinamento_colab.ipynb`](notebooks/treinamento_colab.ipynb) executa o
