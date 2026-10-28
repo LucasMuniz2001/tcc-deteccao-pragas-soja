@@ -201,7 +201,16 @@ e com o número de exemplares sobre o qual foi calculada.
    Classificar uma joaninha como percevejo tem consequência oposta à desejada pelo
    manejo, podendo induzir uma aplicação de defensivo justamente onde há controle
    biológico em curso — erro que a precisão média global não distingue de qualquer
-   outro.
+   outro. O grupo dos organismos que não são praga contém apenas Coccinellidae.
+   *Lagria villosa* fica entre as pragas: é secundária, mas pode causar dano, e
+   tratá-la como inofensiva seria a escolha menos conservadora.
+
+A matriz de confusão é montada com limiar de confiança de 0,25, o mesmo da
+predição em uso, e IoU de 0,45 para casar detecção e anotação. As métricas de
+precisão média continuam calculadas com o limiar de 0,001 da validação, sem o qual
+a curva precisão-revocação fica truncada. A separação é necessária porque, na
+versão 8.4.183, a biblioteca monta a matriz com o mesmo limiar das métricas, e a
+0,001 quase toda saída da rede seria contada como detecção.
 
 ### Tempo de inferência
 
