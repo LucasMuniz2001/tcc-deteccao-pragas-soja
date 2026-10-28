@@ -179,24 +179,73 @@ GPU NVIDIA T4. O orçamento estimado é de cerca de 25 horas de GPU, o que exced
 
 ---
 
+## Resultados
+
+YOLOv8m, 15 execuções (5 dobras × 3 sementes), pesos da melhor época; a última
+época entra como verificação do viés de escolher a época pela própria validação.
+
+| Métrica | Melhor época | Última época |
+|---|---|---|
+| mAP@0,5 | 0,891 ± 0,018 | 0,880 ± 0,019 |
+| mAP@0,5:0,95 | 0,553 ± 0,016 | 0,539 ± 0,018 |
+| Precisão | 0,907 ± 0,026 | 0,907 ± 0,034 |
+| Revocação | 0,834 ± 0,032 | 0,827 ± 0,032 |
+
+As duas metas foram atingidas. A variação vem da partição, não da semente: o
+desvio padrão entre as médias das sementes é 0,003 de mAP@0,5:0,95, contra 0,015
+entre as médias das dobras.
+
+Tempo por imagem, mediana, uma imagem por vez:
+
+| Modelo | mAP@0,5 (fase 1) | GPU T4 | CPU Ryzen 7 7730U (ONNX) |
+|---|---|---|---|
+| YOLOv8n | 0,847 | 9,4 ms | 74,8 ms |
+| YOLOv8s | 0,873 | 15,4 ms | 208,4 ms |
+| YOLOv8m | 0,892 | 36,9 ms | 499,5 ms |
+
+O que as três análises da contribuição mostraram:
+
+- **Por classe** — onze classes entre 0,87 e 0,96 de mAP@0,5. A ninfa de
+  *Nezara viridula*, com 4,6 instâncias por dobra, fica em 0,70 ± 0,24.
+- **Confusões** — o erro dominante é não detectar o organismo (até 15%). A maior
+  troca entre classes é ninfa de *N. viridula* → ninfa de *E. heros* (21,7%).
+  Adulto × ninfa da mesma espécie fica abaixo de 3%; entre lagartas, zero.
+- **Praga × não praga** — 2,8% das joaninhas detectadas como praga; 0,09% das
+  pragas detectadas como joaninha.
+
+A análise completa está no Capítulo 3 do trabalho escrito. Para reproduzir:
+
+```
+python -P scripts/03_analisa_avaliacao.py  <dir_json>  --peso best
+python -P scripts/04_tempo_cpu.py  dados_yolo  <dir_onnx>  tempo_cpu.csv
+```
+
+## Protótipo
+
+```
+python -P scripts/05_prototipo.py  <pesos.pt>  --exemplos img1.jpg img2.jpg
+```
+
+Página local (Gradio) em `http://127.0.0.1:7860`: recebe uma imagem e devolve as
+caixas, a contagem por classe com o papel agronômico de cada organismo e o tempo
+decomposto. Avisa quando há inimigo natural na imagem. Os pesos usados no trabalho
+são os da execução de desempenho mediano (YOLOv8m, dobra 4, semente 1), e não os
+da melhor, para que a demonstração não seja otimista.
+
+---
+
 ## Estado atual
 
 | Etapa | Situação |
 |---|---|
 | Introdução (Capítulo 1) | Escrita |
-| Materiais e métodos (Capítulo 2) | Escrito, em revisão pelo professor |
-| Auditoria do conjunto de dados | Executada — 6 ocorrências encontradas |
-| Análise de quase-duplicatas | Executada — 6 grupos, 13 imagens |
-| Regeneração dos rótulos | Implementada e executada — `scripts/01_regenera_rotulos.py` |
-| Partição em dobras | Implementada e executada — `scripts/02_particiona_dobras.py` |
-| Notebook de treinamento | Implementado — `notebooks/treinamento_colab.ipynb` |
-| Treinamento | Não iniciado |
-| Resultados (Capítulo 3) | Não iniciado |
-| Conclusão (Capítulo 4) | Não iniciado |
-
-Os scripts serão publicados aqui conforme forem implementados. Este repositório
-nasceu com a documentação do método porque a especificação precede a implementação,
-e não porque o código já existisse.
+| Materiais e métodos (Capítulo 2) | Escrito e aprovado |
+| Auditoria, regeneração dos rótulos e partição | Executadas — scripts 01 e 02 |
+| Treinamento (25 execuções) | Concluído — `notebooks/treinamento_colab.ipynb` |
+| Avaliação | Concluída — `notebooks/avaliacao_colab.ipynb`, scripts 03 e 04 |
+| Protótipo | Implementado — script 05 |
+| Análise e discussão (Capítulo 3) | Escrita |
+| Conclusão (Capítulo 4) | Não iniciada |
 
 ---
 

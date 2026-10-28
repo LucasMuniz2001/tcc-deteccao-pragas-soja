@@ -70,6 +70,32 @@ escrito. O gargalo do projeto não é tempo de GPU.
 
 O conjunto preparado ocupa aproximadamente 260 MB, enviado uma única vez.
 
+## Reprodutibilidade
+
+A partição e a configuração de cada execução são exatamente reproduzíveis: a
+semente é fixa e gravada, e a partição vem de `particao.json`. Os **pesos não são**.
+Para encurtar a época, o treino usa `cache="ram"`, e nessa configuração a
+Ultralytics avisa que não garante determinismo — duas execuções com a mesma
+semente podem chegar a pesos ligeiramente diferentes. Somam-se a isso as operações
+não determinísticas da GPU.
+
+O efeito foi medido em vez de presumido: entre as três sementes do YOLOv8m, o
+desvio padrão das médias é de 0,003 de mAP@0,5:0,95, cinco vezes menor que o
+desvio entre dobras. A variação residual não altera os resultados agregados.
+
+## Inferência na máquina local
+
+| Componente | Versão |
+|---|---|
+| Ultralytics | 8.4.183 |
+| PyTorch (CPU) | 2.14.1 |
+| ONNX Runtime | 1.31.1 |
+| Gradio (protótipo) | 6.31.0 |
+
+O tempo em CPU foi medido com o computador na tomada e o plano de energia
+**Equilibrado**. Em bateria ou em outro plano o número muda; ao refazer a medição,
+registre a condição.
+
 ## Ferramentas
 
 | Função | Ferramenta |
